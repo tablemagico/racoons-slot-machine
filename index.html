@@ -2,27 +2,40 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <title>Racoon Slot Makinesi</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Gerçek Slot Makinesi</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <h1>Racoon Slot Makinesi</h1>
 
-  <!-- 3 Slot (Her biri bir <img>) -->
-  <div class="slots">
-    <img id="slot1" src="images/racoons1.jpeg" alt="slot1">
-    <img id="slot2" src="images/racoons2.jpeg" alt="slot2">
-    <img id="slot3" src="images/racoons3.jpeg" alt="slot3">
+  <!-- Makine alanı (3 reel) -->
+  <div class="machine">
+    <!-- Reel 1 -->
+    <div class="reel" id="reel1">
+      <div class="reel-content" id="reel1-content">
+        <!-- script.js ile doldurulacak -->
+      </div>
+    </div>
+
+    <!-- Reel 2 -->
+    <div class="reel" id="reel2">
+      <div class="reel-content" id="reel2-content">
+        <!-- script.js ile doldurulacak -->
+      </div>
+    </div>
+
+    <!-- Reel 3 -->
+    <div class="reel" id="reel3">
+      <div class="reel-content" id="reel3-content">
+        <!-- script.js ile doldurulacak -->
+      </div>
+    </div>
   </div>
 
-  <div>
-    <button id="spinBtn">Spin</button>
-  </div>
-  
-  <!-- Sonucu göstermek için (Jackpot / Tekrar dene) -->
+  <button id="spinBtn">Spin</button>
+
   <div id="result"></div>
 
-  <!-- Harici JS dosyamız -->
   <script src="script.js"></script>
 </body>
 </html>

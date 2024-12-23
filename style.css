@@ -1,80 +1,55 @@
 /* style.css */
 
-/* Genel sayfa stili */
+/* Genel sayfa görünümü */
 body {
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(to right, #e0eafc, #cfdef3);
-    font-family: Arial, sans-serif;
-    text-align: center;
-    color: #333;
-  }
-  
-  h1 {
-    margin: 20px 0;
-  }
-  
-  /* Makine alanı */
-  .machine {
-    display: inline-flex; /* 3 reel yanyana */
-    margin: 30px auto;
-    border: 4px solid #444;
-    border-radius: 10px;
-    padding: 10px;
-    background: #aaa;
-  }
-  
-  /* Tek bir reel (makara) */
-  .reel {
-    width: 100px;       /* her makarada 100px genişlik */
-    height: 150px;      /* görünen pencere yüksekliği */
-    overflow: hidden;   /* içindeki taşan kısım gizlensin (kayma efekti) */
-    margin: 0 5px;
-    background: #fff;
-    border-radius: 4px;
-    border: 2px solid #666;
-    position: relative;
-  }
-  
-  /* Reel içeriği (çok sayıda resim) */
-  .reel-content {
-    position: absolute;
-    top: 0; 
-    left: 0;
-    width: 100%;
-    /* height auto; kendisi uzayacak */
-  }
-  
-  /* Reel içerisindeki her bir resim */
-  .reel-content img {
-    display: block;
-    width: 100%;
-    height: auto;
-    /* Arka arkaya dizilsin. Her resmin yüksekliği benzer olsun. */
-    border-bottom: 1px solid #ccc;
-  }
-  
-  /* Spin butonu */
-  #spinBtn {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #6c63ff;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    border-radius: 6px;
-    margin-bottom: 20px;
-  }
-  
-  #spinBtn:hover {
-    background-color: #5b54cc;
-  }
-  
-  /* Sonuç yazısı */
-  #result {
-    font-size: 20px;
-    font-weight: bold;
-    margin-top: 15px;
-    min-height: 30px; /* buton tıklamadan önce sayfa kaymasın diye */
-  }
-  
+  margin: 0; 
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to right, #e0eafc, #cfdef3);
+  text-align: center;
+}
+
+/* Başlık */
+h1 {
+  margin-top: 20px;
+}
+
+/* Slot görsellerinin satır içi blok olarak yan yana gelmesi */
+.slots {
+  margin: 30px auto;
+  display: inline-flex;
+  gap: 20px;
+}
+
+/* Slot <img> görselleri */
+.slots img {
+  width: 150px;
+  height: 150px;
+  border: 2px solid #333;
+  border-radius: 8px;
+  background: #fff;
+}
+
+/* Buton stili */
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #6c63ff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+button:hover {
+  background-color: #5b54cc;
+}
+
+/* Sonuç yazısı */
+#result {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 10px;
+  min-height: 30px; /* Henüz sonuç yokken sayfa kaymasın diye */
+}

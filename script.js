@@ -43,35 +43,40 @@ function populateReel(reelElement, repeatCount) {
   }
 }
 
-// Spin fonksiyonu: her 100ms'de bir resim değiştir
+// Reel'i döndürme fonksiyonu (Hız yavaşlamalı)
 function spinReel(reelElement, duration, callback) {
-  let currentStep = 0;
-  const intervalTime = 100; // ms
-  const totalSteps = Math.floor(duration / intervalTime); // 2000 / 100 = 20 steps
-  const totalImages = reelElement.querySelectorAll("img").length;
+  let startTime = null;
+  const initialSpeed = 30; // Başlangıç hızı (px/frame)
+  const deceleration = 0.5; // Hızın yavaşlama oranı
+  let currentSpeed = initialSpeed;
 
-  const spinInterval = setInterval(() => {
-    // Her step, aşağı kaydır
-    // currentStep mod totalImages
-    reelElement.style.top = (-currentStep * 100) + "px";
-    currentStep++;
-    if (currentStep >= totalImages) {
-      currentStep = 0;
-    }
-    
-    // Spin tamamlandıysa dur
-    if (currentStep >= totalSteps) {
-      clearInterval(spinInterval);
-      // Calculate final index
-      const finalIndex = currentStep % racoonImages.length;
-      // Set reel to final index
+  function animate(timestamp) {
+    if (!startTime) startTime = timestamp;
+    const elapsed = timestamp - startTime;
+
+    if (elapsed < duration) {
+      const displacement = currentSpeed;
+      let currentTop = parseFloat(reelElement.style.top) || 0;
+      reelElement.style.top = (currentTop - displacement) + "px";
+
+      // Hızı yavaşlat
+      currentSpeed -= deceleration;
+      if (currentSpeed < 5) currentSpeed = 5; // Minimum hız
+
+      requestAnimationFrame(animate);
+    } else {
+      // Spin tamamlandı, reel'i durdur
+      // Ortadaki resmin index'ini bul
+      const finalIndex = getMiddleImageIndex(reelElement);
       reelElement.style.top = (-finalIndex * 100) + "px";
       callback(finalIndex);
     }
-  }, intervalTime);
+  }
+
+  requestAnimationFrame(animate);
 }
 
-// Orta satırdaki resmi bul
+// Ortadaki resmi bulma fonksiyonu
 function getMiddleImageIndex(reelElement) {
   const currentTop = parseFloat(reelElement.style.top) || 0;
   const reelHeight = reelElement.parentElement.clientHeight; // 300px
@@ -82,6 +87,9 @@ function getMiddleImageIndex(reelElement) {
   const totalImages = reelElement.querySelectorAll("img").length;
   if (index < 0) index = 0;
   if (index >= totalImages) index = totalImages - 1;
+
+  // Resimlerin tekrarlandığını göz önünde bulundurarak index'i normalize et
+  index = index % racoonImages.length;
 
   return index;
 }
@@ -94,21 +102,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const spinBtn = document.getElementById("spinBtn");
   const resultDiv = document.getElementById("result");
 
-  // Her reel'e 15 resim, tekrarlayarak 150 resim ekliyoruz
-  // repeatCount = 10: 15x10=150 resim
-  populateReel(reel1Content, 10);
-  populateReel(reel2Content, 10);
-  populateReel(reel3Content, 10);
+  // Her reel'e 15 resmin 10 kez tekrarlanması (150 resim)
+  const repeatCount = 10;
+  populateReel(reel1Content, repeatCount);
+  populateReel(reel2Content, repeatCount);
+  populateReel(reel3Content, repeatCount);
 
   spinBtn.addEventListener("click", () => {
     resultDiv.textContent = "";
 
-    // Her spin'de yeniden shuffle ve populate
-    populateReel(reel1Content, 10);
-    populateReel(reel2Content, 10);
-    populateReel(reel3Content, 10);
+    // Her spin'de yeniden doldur (yeni shuffle)
+    populateReel(reel1Content, repeatCount);
+    populateReel(reel2Content, repeatCount);
+    populateReel(reel3Content, repeatCount);
 
-    // Spin süresi
+    // Spin süresi (her reel için farklı olabilir)
     const spinDuration = 2000; // 2 saniye
 
     let finalIndexes = [null, null, null];
@@ -119,18 +127,21 @@ document.addEventListener("DOMContentLoaded", () => {
       checkFinal();
     });
 
-    // Reel 2'i döndür
-    spinReel(reel2Content, spinDuration, (finalIndex2) => {
+    // Reel 2'yi döndür
+    // Reel 2'nin spin süresini biraz daha uzatıyoruz (gerçek slot makinesine benzerlik için)
+    spinReel(reel2Content, spinDuration + 500, (finalIndex2) => {
       finalIndexes[1] = finalIndex2;
       checkFinal();
     });
 
     // Reel 3'ü döndür
-    spinReel(reel3Content, spinDuration, (finalIndex3) => {
+    // Reel 3'ün spin süresini biraz daha uzatıyoruz
+    spinReel(reel3Content, spinDuration + 1000, (finalIndex3) => {
       finalIndexes[2] = finalIndex3;
       checkFinal();
     });
 
+    // Tüm reel'ler durduğunda sonucu kontrol et
     function checkFinal() {
       if (finalIndexes.every(idx => idx !== null)) {
         const img1 = racoonImages[finalIndexes[0]];
@@ -143,7 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
           resultDiv.textContent = "Tekrar dene!";
         }
 
-        // Sıfırla
+        // Sonuçları sıfırla
         finalIndexes = [null, null, null];
       }
     }

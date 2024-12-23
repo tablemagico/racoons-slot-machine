@@ -1,6 +1,6 @@
 /* style.css */
 
-/* Genel sayfa stili */
+/* Genel sayfa stilleri */
 body {
   margin: 0;
   padding: 0;
@@ -27,7 +27,7 @@ h1 {
 /* Reel (her makara) */
 .reel {
   width: 120px;       /* reel genişliği */
-  height: 300px;      /* görünür pencere yüksekliği */
+  height: 300px;      /* görünür pencere yüksekliği (3 satır x 100px) */
   overflow: hidden;   /* taşan kısım görünmesin */
   margin: 0 10px;
   position: relative; /* overlay ekleyebilmek için */
@@ -46,9 +46,7 @@ h1 {
   height: 100%;
   pointer-events: none; /* tıklamayı engellemez */
   /* Üst ve alt 1/3'lük kısımları flu/gradient ile kapatmak:
-     Burada linear-gradient(...) ile ortadaki kısım şeffaf,
-     üst ve alt kısımlar yarı şeffaf beyaz olabilir.
-  */
+     Ortadaki kısım şeffaf, üst ve alt kısımlar yarı şeffaf beyaz */
   background: linear-gradient(
     to bottom,
     rgba(255, 255, 255, 0.7) 0%,
@@ -56,7 +54,6 @@ h1 {
     rgba(255, 255, 255, 0) 66%,
     rgba(255, 255, 255, 0.7) 100%
   );
-  /* istersen filter: blur(2px); vb. ekleyebilirsin */
   z-index: 2; /* reel-content'in üstünde */
 }
 
@@ -65,7 +62,7 @@ h1 {
   position: absolute;
   top: 0; left: 0;
   width: 100%;
-  /* yükseklik dinamik olacak (eklediğimiz resim sayısına göre uzar) */
+  transition: top 0.1s linear;
 }
 
 /* reel içerisindeki her resim */

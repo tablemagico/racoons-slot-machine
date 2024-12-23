@@ -19,7 +19,7 @@ const racoonImages = [
   "images/racoons15.jpeg"
 ];
 
-// Basit shuffle
+// Basit dizi karıştırma (Fisher-Yates)
 function shuffleArray(array) {
   const arr = [...array];
   for (let i = arr.length - 1; i > 0; i--) {
@@ -29,73 +29,61 @@ function shuffleArray(array) {
   return arr;
 }
 
-// Her reel'e "satirSayisi" kadar (ör: 9-10) resim ekliyoruz ki rahat dönsün
-// 3 satır ekranda gözükecek, 6-7 satırı da dönme animasyonu sırasında kullanılır.
-// Rastgele 15 resimden seçilip eklenebilir
-function populateReel(reelElement, satirSayisi) {
+// Her reel'e "repeatCount" kadar (ör: 15x10=150) resim ekliyoruz
+function populateReel(reelElement, repeatCount) {
   reelElement.innerHTML = "";
-  // Tüm resimleri shuffle et
   const shuffled = shuffleArray(racoonImages);
-
-  // satirSayisi kadar resim ekle (tekrar da olabilir)
-  for (let i = 0; i < satirSayisi; i++) {
-    // i, 15'ten büyükse mod al, 0-14 arası index tekrar kullansın
-    const index = i % shuffled.length; 
-    const img = document.createElement("img");
-    img.src = shuffled[index];
-    reelElement.appendChild(img);
+  
+  for (let i = 0; i < repeatCount; i++) {
+    shuffled.forEach(src => {
+      const img = document.createElement("img");
+      img.src = src;
+      reelElement.appendChild(img);
+    });
   }
 }
 
-// Dikey kaydırma animasyonu
-// reelElement = reel-content
-// duration = kaç ms dönecek
-// callback = durunca yapılacak işlem
+// Spin fonksiyonu: her 100ms'de bir resim değiştir
 function spinReel(reelElement, duration, callback) {
-  reelElement.style.top = "0px";
-  let startTime = null;
-  // Her frame'de ne kadar piksel kaydıralım? (örnek sabit hız)
-  const speed = 20; // px per frame (isteğe göre ayarla)
+  let currentStep = 0;
+  const intervalTime = 100; // ms
+  const totalSteps = Math.floor(duration / intervalTime); // 2000 / 100 = 20 steps
+  const totalImages = reelElement.querySelectorAll("img").length;
 
-  function animate(timestamp) {
-    if (!startTime) startTime = timestamp;
-    const elapsed = timestamp - startTime;
-    let currentTop = parseFloat(reelElement.style.top) || 0;
-
-    // Yukarı kaydır
-    reelElement.style.top = (currentTop - speed) + "px";
-
-    // Daha bitmedi, devam
-    if (elapsed < duration) {
-      requestAnimationFrame(animate);
-    } else {
-      // Bitti, callback
-      callback();
+  const spinInterval = setInterval(() => {
+    // Her step, aşağı kaydır
+    // currentStep mod totalImages
+    reelElement.style.top = (-currentStep * 100) + "px";
+    currentStep++;
+    if (currentStep >= totalImages) {
+      currentStep = 0;
     }
-  }
-
-  requestAnimationFrame(animate);
+    
+    // Spin tamamlandıysa dur
+    if (currentStep >= totalSteps) {
+      clearInterval(spinInterval);
+      // Calculate final index
+      const finalIndex = currentStep % racoonImages.length;
+      // Set reel to final index
+      reelElement.style.top = (-finalIndex * 100) + "px";
+      callback(finalIndex);
+    }
+  }, intervalTime);
 }
 
-// Orta satır => 2. satır. (satır yüksekliği = 100px, reel toplam = 300px)
-// "Ortada hangi resim var?" => top offset'i hesaba katmalıyız.
-function getMiddleIndex(reelElement) {
+// Orta satırdaki resmi bul
+function getMiddleImageIndex(reelElement) {
   const currentTop = parseFloat(reelElement.style.top) || 0;
+  const reelHeight = reelElement.parentElement.clientHeight; // 300px
+  const middlePixel = -currentTop + (reelHeight / 2);
+  const imgHeight = 100;
+  let index = Math.floor(middlePixel / imgHeight);
 
-  // Her satır 100px
-  // Orta satırın tam ortası: 150px (toplam 300px / 2)
-  const middlePixel = -currentTop + 150;
+  const totalImages = reelElement.querySelectorAll("img").length;
+  if (index < 0) index = 0;
+  if (index >= totalImages) index = totalImages - 1;
 
-  // Kaçıncı satırdayız?
-  // (0. satır: 0-100px, 1. satır: 100-200px, 2. satır: 200-300px, ...)
-  let rowIndex = Math.floor(middlePixel / 100);
-
-  // reelElement içindeki toplam satır sayısı
-  const totalRows = reelElement.querySelectorAll("img").length;
-  if (rowIndex < 0) rowIndex = 0;
-  if (rowIndex >= totalRows) rowIndex = totalRows - 1;
-
-  return rowIndex;
+  return index;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -106,50 +94,56 @@ document.addEventListener("DOMContentLoaded", () => {
   const spinBtn = document.getElementById("spinBtn");
   const resultDiv = document.getElementById("result");
 
-  // Başlangıçta dolduralım (örnek 9 satırlık)
-  populateReel(reel1Content, 9);
-  populateReel(reel2Content, 9);
-  populateReel(reel3Content, 9);
+  // Her reel'e 15 resim, tekrarlayarak 150 resim ekliyoruz
+  // repeatCount = 10: 15x10=150 resim
+  populateReel(reel1Content, 10);
+  populateReel(reel2Content, 10);
+  populateReel(reel3Content, 10);
 
   spinBtn.addEventListener("click", () => {
     resultDiv.textContent = "";
 
-    // Her spin'de tekrar doldur (yeni shuffle):
-    populateReel(reel1Content, 9);
-    populateReel(reel2Content, 9);
-    populateReel(reel3Content, 9);
+    // Her spin'de yeniden shuffle ve populate
+    populateReel(reel1Content, 10);
+    populateReel(reel2Content, 10);
+    populateReel(reel3Content, 10);
 
-    // 2 sn dönsün
-    const spinDuration = 2000;
+    // Spin süresi
+    const spinDuration = 2000; // 2 saniye
+
     let finalIndexes = [null, null, null];
 
-    spinReel(reel1Content, spinDuration, () => {
-      finalIndexes[0] = getMiddleIndex(reel1Content);
-      checkFinal();
-    });
-    spinReel(reel2Content, spinDuration, () => {
-      finalIndexes[1] = getMiddleIndex(reel2Content);
-      checkFinal();
-    });
-    spinReel(reel3Content, spinDuration, () => {
-      finalIndexes[2] = getMiddleIndex(reel3Content);
+    // Reel 1'i döndür
+    spinReel(reel1Content, spinDuration, (finalIndex1) => {
+      finalIndexes[0] = finalIndex1;
       checkFinal();
     });
 
-    // Bütün reel'ler durunca sonucu kontrol edelim
+    // Reel 2'i döndür
+    spinReel(reel2Content, spinDuration, (finalIndex2) => {
+      finalIndexes[1] = finalIndex2;
+      checkFinal();
+    });
+
+    // Reel 3'ü döndür
+    spinReel(reel3Content, spinDuration, (finalIndex3) => {
+      finalIndexes[2] = finalIndex3;
+      checkFinal();
+    });
+
     function checkFinal() {
       if (finalIndexes.every(idx => idx !== null)) {
-        // Hepsi durdu
-        const img1 = reel1Content.querySelectorAll("img")[finalIndexes[0]].src;
-        const img2 = reel2Content.querySelectorAll("img")[finalIndexes[1]].src;
-        const img3 = reel3Content.querySelectorAll("img")[finalIndexes[2]].src;
-        
+        const img1 = racoonImages[finalIndexes[0]];
+        const img2 = racoonImages[finalIndexes[1]];
+        const img3 = racoonImages[finalIndexes[2]];
+
         if (img1 === img2 && img2 === img3) {
           resultDiv.textContent = "Jackpot!";
         } else {
           resultDiv.textContent = "Tekrar dene!";
         }
-        // sıfırla
+
+        // Sıfırla
         finalIndexes = [null, null, null];
       }
     }

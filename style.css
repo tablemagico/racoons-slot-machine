@@ -26,10 +26,10 @@ h1 {
 
 /* Reel (her makara) */
 .reel {
-  width: 100px;       /* 1 satırın genişliği 100px */
-  height: 300px;      /* 3 satır x 100px = 300px toplam */
+  width: 120px;       /* reel genişliği */
+  height: 300px;      /* görünür pencere yüksekliği */
   overflow: hidden;   /* taşan kısım görünmesin */
-  margin: 0 5px;
+  margin: 0 10px;
   position: relative; /* overlay ekleyebilmek için */
   background: #fff;
   border-radius: 4px;
@@ -47,7 +47,7 @@ h1 {
   pointer-events: none; /* tıklamayı engellemez */
   /* Üst ve alt 1/3'lük kısımları flu/gradient ile kapatmak:
      Burada linear-gradient(...) ile ortadaki kısım şeffaf,
-     üst ve alt kısımlar beyaz/blur olabilir.
+     üst ve alt kısımlar yarı şeffaf beyaz olabilir.
   */
   background: linear-gradient(
     to bottom,
@@ -71,7 +71,7 @@ h1 {
 /* reel içerisindeki her resim */
 .reel-content img {
   display: block;
-  width: 100px;   /* tam satır genişliği */
+  width: 120px;   /* tam reel genişliği */
   height: 100px;  /* her satır 100px */
   object-fit: cover; /* resimler orantılı sığsın */
   border-bottom: 1px solid #ccc;

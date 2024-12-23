@@ -1,6 +1,6 @@
 // script.js
 
-// 15 tane NFT görselin
+// 15 NFT görselin:
 const racoonImages = [
   "images/racoons1.jpeg",
   "images/racoons2.jpeg",
@@ -19,9 +19,9 @@ const racoonImages = [
   "images/racoons15.jpeg"
 ];
 
-// Basit bir Fisher–Yates shuffle (diziyi rastgele sıralamak için)
+// Basit dizi karıştırma
 function shuffleArray(array) {
-  const arr = [...array]; // orijinali kopyala (zorunlu değil ama iyi)
+  const arr = [...array];
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [arr[i], arr[j]] = [arr[j], arr[i]];
@@ -29,65 +29,141 @@ function shuffleArray(array) {
   return arr;
 }
 
-// DOM elementlerini seç
-const slot1 = document.getElementById("slot1");
-const slot2 = document.getElementById("slot2");
-const slot3 = document.getElementById("slot3");
-const spinBtn = document.getElementById("spinBtn");
-const resultDiv = document.getElementById("result");
+// Her reel'e (reelContent) 'repeatCount' kadar rastgele sıralanmış 15 resmi ekle
+function populateReel(reelElement, repeatCount) {
+  reelElement.innerHTML = ""; // varsa temizle
 
-spinBtn.addEventListener("click", () => {
-  // Sonuç yazısını sıfırla
-  resultDiv.textContent = "";
+  for (let i = 0; i < repeatCount; i++) {
+    // 15 resmi shuffle et
+    const shuffled = shuffleArray(racoonImages);
+    // Ekle
+    shuffled.forEach(src => {
+      const img = document.createElement("img");
+      img.src = src;
+      reelElement.appendChild(img);
+    });
+  }
+}
 
-  // Her spin'de 3 AYRI rastgele sıralama
-  const reel1 = shuffleArray(racoonImages);
-  const reel2 = shuffleArray(racoonImages);
-  const reel3 = shuffleArray(racoonImages);
+// Her reel'i döndürme fonksiyonu
+// reelElement => reel-content
+// duration => kaç ms dönecek
+// callback => durunca yapılacak işlem
+function spinReel(reelElement, duration, callback) {
+  reelElement.style.top = "0px";
+  
+  // Sabit hız
+  const speed = 30; // px/frame
+  let startTime = null;
 
-  // 3 reel de index'lerini 0'dan başlatsın
-  let idx1 = 0, idx2 = 0, idx3 = 0;
+  function animate(timestamp) {
+    if (!startTime) startTime = timestamp;
+    const elapsed = timestamp - startTime;
+    let currentTop = parseFloat(reelElement.style.top) || 0;
 
-  // Ne kadar sürede dönsün?
-  const intervalTime = 100;  // 0.1 saniyede 1 resim
-  const spinDuration = 2000; // 2 saniye toplam spin
+    // Yukarı kaydırma (currentTop - speed)
+    reelElement.style.top = (currentTop - speed) + "px";
 
-  // 1. Reel - her 100ms'de resim değiştir
-  const interval1 = setInterval(() => {
-    slot1.src = reel1[idx1];
-    idx1++;
-    if (idx1 >= reel1.length) idx1 = 0; // Biterse başa dön, beyaz ekran yok
-  }, intervalTime);
-
-  // 2. Reel
-  const interval2 = setInterval(() => {
-    slot2.src = reel2[idx2];
-    idx2++;
-    if (idx2 >= reel2.length) idx2 = 0;
-  }, intervalTime);
-
-  // 3. Reel
-  const interval3 = setInterval(() => {
-    slot3.src = reel3[idx3];
-    idx3++;
-    if (idx3 >= reel3.length) idx3 = 0;
-  }, intervalTime);
-
-  // 2 saniye (spinDuration) sonra durdur
-  setTimeout(() => {
-    clearInterval(interval1);
-    clearInterval(interval2);
-    clearInterval(interval3);
-
-    // Durdurduğumuz AN'daki 3 resim eğer aynıysa = "Jackpot!"
-    const finalSrc1 = slot1.src;
-    const finalSrc2 = slot2.src;
-    const finalSrc3 = slot3.src;
-
-    if (finalSrc1 === finalSrc2 && finalSrc2 === finalSrc3) {
-      resultDiv.textContent = "Jackpot!";
+    if (elapsed < duration) {
+      requestAnimationFrame(animate);
     } else {
-      resultDiv.textContent = "Tekrar dene!";
+      // Durunca callback
+      callback();
     }
-  }, spinDuration);
+  }
+
+  requestAnimationFrame(animate);
+}
+
+// Ortadaki resmi bul (Reel yüksekliği 180px => ortası ~90px)
+function getMiddleImageIndex(reelElement) {
+  const currentTop = parseFloat(reelElement.style.top) || 0;
+  // Bir resmin yüksekliği (varsayılan ~100-120px olabilir,
+  // net ölçmek için ilk resmi incelemek iyidir.)
+  const firstImg = reelElement.querySelector("img");
+  if (!firstImg) return 0;
+
+  const imgHeight = firstImg.offsetHeight; // piksel cinsinden
+  // Ortanın reel içinde kalması = ( -currentTop + 90 ) / imgHeight
+  const middlePixel = -currentTop + 90;
+  let index = Math.floor(middlePixel / imgHeight);
+
+  // dizi sınırlarını aşma
+  const totalImg = reelElement.querySelectorAll("img").length;
+  if (index < 0) index = 0;
+  if (index >= totalImg) index = totalImg - 1;
+
+  return index;
+}
+
+// Ana program
+document.addEventListener("DOMContentLoaded", () => {
+  const reel1Content = document.getElementById("reel1-content");
+  const reel2Content = document.getElementById("reel2-content");
+  const reel3Content = document.getElementById("reel3-content");
+
+  const spinBtn = document.getElementById("spinBtn");
+  const resultDiv = document.getElementById("result");
+
+  // Başlangıçta reel'leri dolduralım (3 veya 4 tekrarla)
+  populateReel(reel1Content, 3);
+  populateReel(reel2Content, 3);
+  populateReel(reel3Content, 3);
+
+  spinBtn.addEventListener("click", () => {
+    resultDiv.textContent = "";
+
+    // Her Spin'de yeniden doldur (yeni shuffle) istersen:
+    populateReel(reel1Content, 3);
+    populateReel(reel2Content, 3);
+    populateReel(reel3Content, 3);
+
+    // 2sn dönsün
+    const spinDuration = 2000;
+
+    // 1. Reel'i döndür
+    spinReel(reel1Content, spinDuration, () => {
+      // Durunca ortadaki resmi bul
+      const idx1 = getMiddleImageIndex(reel1Content);
+      finalizeResult(0, idx1);
+    });
+
+    // 2. Reel
+    spinReel(reel2Content, spinDuration, () => {
+      const idx2 = getMiddleImageIndex(reel2Content);
+      finalizeResult(1, idx2);
+    });
+
+    // 3. Reel
+    spinReel(reel3Content, spinDuration, () => {
+      const idx3 = getMiddleImageIndex(reel3Content);
+      finalizeResult(2, idx3);
+    });
+  });
+
+  // Final index'ler
+  let finalIndexes = [null, null, null];
+  function finalizeResult(reelNumber, indexVal) {
+    finalIndexes[reelNumber] = indexVal;
+    // Bütün reel'ler durdu mu?
+    if (finalIndexes.every(i => i !== null)) {
+      // Hepsi durdu, bakalım resimler aynı mı?
+      const reel1Images = reel1Content.querySelectorAll("img");
+      const reel2Images = reel2Content.querySelectorAll("img");
+      const reel3Images = reel3Content.querySelectorAll("img");
+
+      const src1 = reel1Images[finalIndexes[0]].src;
+      const src2 = reel2Images[finalIndexes[1]].src;
+      const src3 = reel3Images[finalIndexes[2]].src;
+
+      if (src1 === src2 && src2 === src3) {
+        resultDiv.textContent = "Jackpot!";
+      } else {
+        resultDiv.textContent = "Tekrar dene!";
+      }
+
+      // Sıfırla
+      finalIndexes = [null, null, null];
+    }
+  }
 });

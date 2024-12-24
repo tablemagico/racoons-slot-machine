@@ -1,46 +1,51 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Gerçek Slot Makinesi</title>
+  <title>Racoon Slot Machine</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Racoon Slot Makinesi</h1>
+  <h1>Racoon Slot Machine</h1>
 
   <div class="machine">
     <!-- Reel 1 -->
     <div class="reel" id="reel1">
       <div class="reel-content" id="reel1-content">
-        <!-- JavaScript ile doldurulacak -->
+        <!-- JavaScript will populate -->
       </div>
     </div>
 
     <!-- Reel 2 -->
     <div class="reel" id="reel2">
       <div class="reel-content" id="reel2-content">
-        <!-- JavaScript ile doldurulacak -->
+        <!-- JavaScript will populate -->
       </div>
     </div>
 
     <!-- Reel 3 -->
     <div class="reel" id="reel3">
       <div class="reel-content" id="reel3-content">
-        <!-- JavaScript ile doldurulacak -->
+        <!-- JavaScript will populate -->
       </div>
     </div>
   </div>
 
-  <button id="spinBtn">Spin</button>
-  
+  <!-- Spin Button -->
+  <button id="spinBtn" class="spin-button">Spin</button>
+
+  <!-- Creator Information -->
+  <div id="creator">Created by: Discord: cryptoayax | X: cryptoAYAx</div>
+
+  <!-- Result Display -->
   <div id="result"></div>
 
-  <!-- Altın Animasyonu İçin -->
+  <!-- Gold Animation -->
   <div id="goldAnimation" class="gold-animation">
     <div class="gold-particles"></div>
   </div>
 
-  <!-- Ses Efektleri -->
+  <!-- Sound Effects -->
   <audio id="spinSound" src="sounds/spin.mp3"></audio>
   <audio id="jackpotSound" src="sounds/jackpot.mp3"></audio>
 

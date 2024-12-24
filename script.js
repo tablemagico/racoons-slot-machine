@@ -73,8 +73,8 @@ function spinReel(reelElement, duration, callback, forceJackpot=false, jackpotIm
           // Reel'i durdururken tüm resimleri aynı yapmak için
           // Öncelikle reel içeriğini temizle
           reelElement.innerHTML = "";
-          // Tek bir resmi tekrar ekle (repeatCount kadar)
-          for (let i = 0; i < 15; i++) { // 15 tekrar, reel yüksekliği 300px
+          // Tek bir resmi tekrar ekle (15 tekrar, reel yüksekliği 300px)
+          for (let i = 0; i < 15; i++) { 
             const img = document.createElement("img");
             img.src = jackpotImage;
             reelElement.appendChild(img);
@@ -119,6 +119,15 @@ function getMiddleImageIndex(reelElement) {
   return index;
 }
 
+// Altın Animasyonunu Gösterme Fonksiyonu
+function showGoldAnimation() {
+  const goldAnimation = document.getElementById("goldAnimation");
+  goldAnimation.style.display = "block";
+  setTimeout(() => {
+    goldAnimation.style.display = "none";
+  }, 1500); // 1.5 saniye
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const reel1Content = document.getElementById("reel1-content");
   const reel2Content = document.getElementById("reel2-content");
@@ -126,6 +135,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const spinBtn = document.getElementById("spinBtn");
   const resultDiv = document.getElementById("result");
+
+  const spinSound = document.getElementById("spinSound");
+  const jackpotSound = document.getElementById("jackpotSound");
+  const goldAnimation = document.getElementById("goldAnimation");
 
   // Her reel'e 15 resmin 10 kez tekrarlanması (150 resim)
   const repeatCount = 10;
@@ -158,6 +171,9 @@ document.addEventListener("DOMContentLoaded", () => {
       jackpotImage = racoonImages[Math.floor(Math.random() * racoonImages.length)];
     }
 
+    // Spin Sesini Çal
+    spinSound.play();
+
     // Reel 1'i döndür
     spinReel(reel1Content, spinDuration, (finalIndex1) => {
       finalIndexes[0] = finalIndex1;
@@ -187,6 +203,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (img1 === img2 && img2 === img3) {
           resultDiv.textContent = "Jackpot!";
+          jackpotSound.play();
+          showGoldAnimation();
         } else if (img1 === img2 || img1 === img3 || img2 === img3) {
           resultDiv.textContent = "Çok yaklaştın!";
         } else {

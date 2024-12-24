@@ -126,13 +126,14 @@ h1 {
 }
 
 .gold-particle {
-  position: absolute;
   width: 20px;
   height: 20px;
   background: radial-gradient(circle, gold 60%, yellow 100%);
   border-radius: 50%;
   opacity: 0.8;
   animation: fall 1.5s linear forwards;
+  /* Daha fazla görsel efekt eklemek için */
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
 }
 
 @keyframes fall {

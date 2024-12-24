@@ -139,8 +139,8 @@ body {
 
 /* Spin Button Styling */
 .spin-button {
-  padding: 1rem 2rem;
-  font-size: 1.5rem; /* Esnek font boyutu */
+  padding: 15px 30px;
+  font-size: 24px; /* Daha büyük yazı */
   background-color: #ffcc00; /* Altın rengi buton */
   color: #000; /* Kontrast için siyah yazı */
   border: none;
@@ -172,7 +172,7 @@ body {
 
 /* Result Text */
 .result-message {
-  font-size: 1.5rem; /* Daha büyük yazı */
+  font-size: 24px; /* Daha büyük yazı */
   font-weight: bold;
   margin-top: 10px;
   min-height: 40px; /* Daha fazla alan */
@@ -182,14 +182,14 @@ body {
 
 /* Jackpot Mesajını Büyütme */
 #result.jackpot {
-  font-size: 2.5rem; /* Jackpot mesajını daha büyük yap */
+  font-size: 36px; /* Jackpot mesajını daha büyük yap */
   color: #ff0000; /* Jackpot için kırmızı renk */
   text-shadow: 2px 2px 4px #000;
 }
 
 /* Creator Information Styling */
 #creator {
-  font-size: 1rem;
+  font-size: 16px;
   margin-top: 10px;
   color: #ddd; /* Daha açık gri */
 }
@@ -241,109 +241,110 @@ body {
   animation: fall 3.5s linear forwards; /* Animasyon süresini artırdık */
 }
 
-/* Responsive Design için parçacık boyutlarını ayarlama */
-@media (max-width: 768px) {
-  .machine {
-    max-width: 500px; /* Reel'lerin fazla büyük olmaması için maksimum genişlik */
-  }
-
+/* Responsive Design */
+@media (max-width: 600px) {
+  /* Reel'lerin genişliğini ve yüksekliğini ayarlama */
   .reel {
-    height: 240px; /* 3 satır x 80px = 240px */
+    width: 25%; /* Reel'ler biraz daha dar */
+    height: 240px; /* 3 satır x 80px */
   }
 
+  /* Reel içerik resimlerini ayarlama */
   .reel-content img {
+    width: 100%;
     height: 80px; /* Her satırın yüksekliği */
   }
 
+  /* Spin butonunu küçültme */
   .spin-button {
-    padding: 1rem 2rem;
-    font-size: 1.5rem;
+    padding: 10px 20px;
+    font-size: 20px; /* Responsive yazı boyutu */
   }
 
+  /* Sonuç mesajını küçültme */
   .result-message {
-    font-size: 1.5rem;
-    min-height: 40px;
+    font-size: 20px;
+    min-height: 30px;
   }
 
+  /* Jackpot mesajını küçültme */
   #result.jackpot {
-    font-size: 2.5rem;
+    font-size: 28px;
   }
 
+  /* Creator bilgisini küçültme */
   #creator {
-    font-size: 1rem;
+    font-size: 14px;
   }
 
+  /* Gold parçacıklarını küçültme */
   .gold-particle {
-    width: 15px;
-    height: 15px;
+    width: 10px; /* Daha küçük parçacıklar */
+    height: 10px;
   }
 
+  /* Başlık font boyutunu küçültme */
   .slot-title {
-    font-size: 3rem;
+    font-size: 36px; /* Responsive başlık boyutu */
   }
 
+  /* Machine konteynerini ayarlama */
   .machine {
-    margin: 20px 0;
-    padding: 15px;
+    margin: 20px auto;
+    padding: 10px;
     max-width: 500px; /* Maksimum genişlik azaltıldı */
   }
 }
 
 @media (max-width: 480px) {
-  .machine {
-    max-width: 300px; /* Reel'lerin fazla büyük olmaması için maksimum genişlik */
-  }
-
+  /* Reel'lerin genişliğini ve yüksekliğini daha da ayarlama */
   .reel {
-    height: 180px; /* 3 satır x 60px = 180px */
+    width: 30%; /* Reel'ler biraz daha geniş */
+    height: 180px; /* 3 satır x 60px */
   }
 
+  /* Reel içerik resimlerini ayarlama */
   .reel-content img {
+    width: 100%;
     height: 60px; /* Her satırın yüksekliği */
   }
 
+  /* Spin butonunu daha da küçültme */
   .spin-button {
-    padding: 0.8rem 1.6rem;
-    font-size: 1.2rem;
+    padding: 8px 16px;
+    font-size: 18px; /* Daha küçük yazı boyutu */
   }
 
+  /* Sonuç mesajını daha da küçültme */
   .result-message {
-    font-size: 1.2rem;
-    min-height: 30px;
+    font-size: 18px;
+    min-height: 25px;
   }
 
+  /* Jackpot mesajını daha da küçültme */
   #result.jackpot {
-    font-size: 2rem;
+    font-size: 24px;
   }
 
+  /* Creator bilgisini daha da küçültme */
   #creator {
-    font-size: 0.9rem;
+    font-size: 12px;
   }
 
+  /* Gold parçacıklarını daha da küçültme */
   .gold-particle {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
   }
 
+  /* Başlık font boyutunu daha da küçültme */
   .slot-title {
-    font-size: 2.5rem;
+    font-size: 30px; /* Daha küçük başlık boyutu */
   }
 
+  /* Machine konteynerini daha da ayarlama */
   .machine {
-    padding: 10px;
+    padding: 8px;
     max-width: 300px; /* Maksimum genişlik daha da azaltıldı */
   }
-}
-
-/* Enhanced Spin Button Animation (Optional) */
-.spin-button.animate-spin {
-  animation: spinButton 1s infinite;
-}
-
-@keyframes spinButton {
-  0% { transform: rotate(0deg); }
-  25% { transform: rotate(5deg); }
-  50% { transform: rotate(-5deg); }
-  75% { transform: rotate(5deg); }
-  100% { transform: rotate(0deg); }
 }

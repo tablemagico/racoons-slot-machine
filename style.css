@@ -106,22 +106,49 @@ h1 {
 /* Altın Animasyonu Stilleri */
 .gold-animation {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: none; /* Başlangıçta gizli */
-  z-index: 10;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 20;
 }
 
-.gold-animation img {
-  width: 200px;
-  animation: fadeOut 1.5s forwards;
+.gold-particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  overflow: hidden;
 }
 
-@keyframes fadeOut {
-  0% { opacity: 1; }
-  80% { opacity: 1; }
-  100% { opacity: 0; }
+.gold-particle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(circle, gold 60%, yellow 100%);
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: fall 1.5s linear forwards;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-100px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Gold Animation Active */
+.gold-animation.active .gold-particle {
+  animation: fall 1.5s linear forwards;
 }
 
 /* Responsive Tasarım */
@@ -145,7 +172,8 @@ h1 {
     font-size: 18px;
   }
 
-  .gold-animation img {
-    width: 150px;
+  .gold-particle {
+    width: 15px;
+    height: 15px;
   }
 }

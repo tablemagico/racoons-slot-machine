@@ -141,7 +141,7 @@ function showGoldAnimation() {
   setTimeout(() => {
     goldAnimation.classList.remove("active");
     goldAnimation.innerHTML = "";
-  }, 1500); // 1.5 saniye
+  }, 2500); // 1.5 saniye
 }
 
 document.addEventListener("DOMContentLoaded", () => {

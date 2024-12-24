@@ -201,13 +201,18 @@ document.addEventListener("DOMContentLoaded", () => {
         const img2 = racoonImages[finalIndexes[1]];
         const img3 = racoonImages[finalIndexes[2]];
 
-        if (img1 === img2 && img2 === img3) {
+        if (isJackpotSpin) {
+          // 3'ün katı spinlerde otomatik olarak jackpot
           resultDiv.textContent = "Jackpot!";
           jackpotSound.play();
           showGoldAnimation();
-        } else if (img1 === img2 || img1 === img3 || img2 === img3) {
-          resultDiv.textContent = "Çok yaklaştın!";
+        } else if (img1 === img2 && img2 === img3) {
+          // Normal spinlerde de tüm resimler aynıysa jackpot
+          resultDiv.textContent = "Jackpot!";
+          jackpotSound.play();
+          showGoldAnimation();
         } else {
+          // Hiçbir resim aynı değilse yeniden dene
           resultDiv.textContent = "Tekrar dene!";
         }
 

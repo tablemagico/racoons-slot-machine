@@ -1,7 +1,7 @@
 // script.js
 
-// 15 rakun resmi
-const racoonImages = [
+// 15 raccoon images
+const raccoonImages = [
   "images/racoons1.jpeg",
   "images/racoons2.jpeg",
   "images/racoons3.jpeg",
@@ -19,24 +19,24 @@ const racoonImages = [
   "images/racoons15.jpeg"
 ];
 
-// Spin sayısını takip etmek için global değişken
+// Global variable to track spin count
 let spinCount = 0;
 
-// Basit dizi karıştırma (Fisher-Yates)
+// Simple array shuffle (Fisher-Yates)
 function shuffleArray(array) {
   const arr = [...array];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+  for (let i = arr.length -1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i+1));
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
   return arr;
 }
 
-// Her reel'e "repeatCount" kadar (ör: 15x10=150) resim ekliyoruz
+// Add "repeatCount" times the images to each reel
 function populateReel(reelElement, repeatCount) {
   reelElement.innerHTML = "";
-  const shuffled = shuffleArray(racoonImages);
-  
+  const shuffled = shuffleArray(raccoonImages);
+
   for (let i = 0; i < repeatCount; i++) {
     shuffled.forEach(src => {
       const img = document.createElement("img");
@@ -46,12 +46,12 @@ function populateReel(reelElement, repeatCount) {
   }
 }
 
-// Reel'i döndürme fonksiyonu (Hız yavaşlamalı)
+// Function to spin the reel (with deceleration)
 function spinReel(reelElement, duration, callback, forceJackpot=false, jackpotImage=null) {
   try {
     let startTime = null;
-    const initialSpeed = 30; // Başlangıç hızı (px/frame)
-    const deceleration = 0.5; // Hızın yavaşlama oranı
+    const initialSpeed = 30; // Initial speed (px/frame)
+    const deceleration = 0.5; // Deceleration rate
     let currentSpeed = initialSpeed;
 
     function animate(timestamp) {
@@ -63,31 +63,30 @@ function spinReel(reelElement, duration, callback, forceJackpot=false, jackpotIm
         let currentTop = parseFloat(reelElement.style.top) || 0;
         reelElement.style.top = (currentTop - displacement) + "px";
 
-        // Hızı yavaşlat
+        // Decelerate
         currentSpeed -= deceleration;
-        if (currentSpeed < 5) currentSpeed = 5; // Minimum hız
+        if (currentSpeed < 5) currentSpeed = 5; // Minimum speed
 
         requestAnimationFrame(animate);
       } else {
         if (forceJackpot && jackpotImage) {
-          // Reel'i durdururken tüm resimleri aynı yapmak için
-          // Öncelikle reel içeriğini temizle
+          // Clear reel content and set to jackpotImage
           reelElement.innerHTML = "";
-          // Tek bir resmi tekrar ekle (15 tekrar, reel yüksekliği 300px)
+          // Add the same image multiple times (15 times, reel height 300px)
           for (let i = 0; i < 15; i++) { 
             const img = document.createElement("img");
             img.src = jackpotImage;
             reelElement.appendChild(img);
           }
-          // Reel'i başa al
+          // Reset reel position
           reelElement.style.top = "0px";
-          // Callback ile final index'i ayarla (rastgele bir index seç)
-          const finalIndex = Math.floor(Math.random() * racoonImages.length);
+          // Set final index randomly
+          const finalIndex = Math.floor(Math.random() * raccoonImages.length);
           reelElement.style.top = (-finalIndex * 100) + "px";
           callback(finalIndex);
         } else {
-          // Normal duruş
-          // Ortadaki resmin index'ini bul
+          // Normal stop
+          // Find the index of the middle image
           const finalIndex = getMiddleImageIndex(reelElement);
           reelElement.style.top = (-finalIndex * 100) + "px";
           callback(finalIndex);
@@ -97,11 +96,11 @@ function spinReel(reelElement, duration, callback, forceJackpot=false, jackpotIm
 
     requestAnimationFrame(animate);
   } catch (error) {
-    console.error("Spin animasyonunda hata:", error);
+    console.error("Error in spin animation:", error);
   }
 }
 
-// Ortadaki resmi bulma fonksiyonu
+// Function to find the index of the middle image
 function getMiddleImageIndex(reelElement) {
   const currentTop = parseFloat(reelElement.style.top) || 0;
   const reelHeight = reelElement.parentElement.clientHeight; // 300px
@@ -113,35 +112,35 @@ function getMiddleImageIndex(reelElement) {
   if (index < 0) index = 0;
   if (index >= totalImages) index = totalImages - 1;
 
-  // Resimlerin tekrarlandığını göz önünde bulundurarak index'i normalize et
-  index = index % racoonImages.length;
+  // Normalize index considering image repetitions
+  index = index % raccoonImages.length;
 
   return index;
 }
 
-// Altın Animasyonunu Gösterme Fonksiyonu
+// Function to show gold animation
 function showGoldAnimation() {
   const goldAnimation = document.getElementById("goldAnimation");
   
-  // Altın parçacıklarını oluştur
-  const particles = 30; // Oluşturulacak parçacık sayısı
+  // Create gold particles
+  const particles = 30; // Number of particles
   for (let i = 0; i < particles; i++) {
     const particle = document.createElement("div");
     particle.classList.add("gold-particle");
-    // Rastgele konumlandırma
+    // Random positioning
     particle.style.left = `${Math.random() * 100}%`;
     particle.style.animationDelay = `${Math.random() * 1.5}s`;
     goldAnimation.appendChild(particle);
   }
 
-  // Animasyonu başlat
+  // Start animation
   goldAnimation.classList.add("active");
 
-  // Animasyon tamamlandığında parçacıkları temizle ve animasyonu durdur
+  // Remove particles after animation
   setTimeout(() => {
     goldAnimation.classList.remove("active");
     goldAnimation.innerHTML = "";
-  }, 2500); // 1.5 saniye
+  }, 1500); // 1.5 seconds
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -156,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const jackpotSound = document.getElementById("jackpotSound");
   const goldAnimation = document.getElementById("goldAnimation");
 
-  // Her reel'e 15 resmin 10 kez tekrarlanması (150 resim)
+  // Populate each reel with 15 images repeated 10 times (150 images)
   const repeatCount = 10;
   populateReel(reel1Content, repeatCount);
   populateReel(reel2Content, repeatCount);
@@ -164,78 +163,76 @@ document.addEventListener("DOMContentLoaded", () => {
 
   spinBtn.addEventListener("click", () => {
     resultDiv.textContent = "";
-    spinCount++; // Spin sayısını artır
+    spinCount++; // Increment spin count
 
-    // Spin butonunu devre dışı bırak
+    // Disable spin button during spin
     spinBtn.disabled = true;
 
-    // Her spin'de yeniden doldur (yeni shuffle)
+    // Repopulate reels with new shuffled images
     populateReel(reel1Content, repeatCount);
     populateReel(reel2Content, repeatCount);
     populateReel(reel3Content, repeatCount);
 
-    // Spin süresi
+    // Spin duration
     const spinDuration = 2000; // ms
 
     let finalIndexes = [null, null, null];
 
-    // Kontrol: Spin sayısı 3'ün katı mı?
+    // Check if spin count is a multiple of 3
     const isJackpotSpin = (spinCount % 3 === 0);
     let jackpotImage = null;
     if (isJackpotSpin) {
-      // Rastgele bir jackpot resmi seç
-      jackpotImage = racoonImages[Math.floor(Math.random() * racoonImages.length)];
+      // Select a random jackpot image
+      jackpotImage = raccoonImages[Math.floor(Math.random() * raccoonImages.length)];
     }
 
-    // Spin Sesini Çal
+    // Play spin sound
     spinSound.play();
 
-    // Reel 1'i döndür
+    // Spin Reel 1
     spinReel(reel1Content, spinDuration, (finalIndex1) => {
       finalIndexes[0] = finalIndex1;
       checkFinal();
     }, isJackpotSpin, jackpotImage);
 
-    // Reel 2'yi döndür
-    // Reel 2'nin spin süresini biraz daha uzatıyoruz (gerçek slot makinesine benzerlik için)
+    // Spin Reel 2 with slightly longer duration
     spinReel(reel2Content, spinDuration + 500, (finalIndex2) => {
       finalIndexes[1] = finalIndex2;
       checkFinal();
     }, isJackpotSpin, jackpotImage);
 
-    // Reel 3'ü döndür
-    // Reel 3'ün spin süresini biraz daha uzatıyoruz
+    // Spin Reel 3 with even longer duration
     spinReel(reel3Content, spinDuration + 1000, (finalIndex3) => {
       finalIndexes[2] = finalIndex3;
       checkFinal();
     }, isJackpotSpin, jackpotImage);
 
-    // Tüm reel'ler durduğunda sonucu kontrol et
+    // Function to check final result
     function checkFinal() {
       if (finalIndexes.every(idx => idx !== null)) {
-        const img1 = racoonImages[finalIndexes[0]];
-        const img2 = racoonImages[finalIndexes[1]];
-        const img3 = racoonImages[finalIndexes[2]];
+        const img1 = raccoonImages[finalIndexes[0]];
+        const img2 = raccoonImages[finalIndexes[1]];
+        const img3 = raccoonImages[finalIndexes[2]];
 
         if (isJackpotSpin) {
-          // 3'ün katı spinlerde otomatik olarak jackpot
+          // Automatic jackpot on every 3rd spin
           resultDiv.textContent = "Jackpot!";
           jackpotSound.play();
           showGoldAnimation();
         } else if (img1 === img2 && img2 === img3) {
-          // Normal spinlerde de tüm resimler aynıysa jackpot
+          // All three images are the same
           resultDiv.textContent = "Jackpot!";
           jackpotSound.play();
           showGoldAnimation();
         } else {
-          // Hiçbir resim aynı değilse yeniden dene
-          resultDiv.textContent = "Tekrar dene!";
+          // No jackpot
+          resultDiv.textContent = "Try Again!";
         }
 
-        // Spin butonunu tekrar etkinleştir
+        // Re-enable spin button
         spinBtn.disabled = false;
 
-        // Sonuçları sıfırla
+        // Reset finalIndexes
         finalIndexes = [null, null, null];
       }
     }

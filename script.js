@@ -122,9 +122,25 @@ function getMiddleImageIndex(reelElement) {
 // Altın Animasyonunu Gösterme Fonksiyonu
 function showGoldAnimation() {
   const goldAnimation = document.getElementById("goldAnimation");
-  goldAnimation.style.display = "block";
+  
+  // Altın parçacıklarını oluştur
+  const particles = 30; // Oluşturulacak parçacık sayısı
+  for (let i = 0; i < particles; i++) {
+    const particle = document.createElement("div");
+    particle.classList.add("gold-particle");
+    // Rastgele konumlandırma
+    particle.style.left = `${Math.random() * 100}%`;
+    particle.style.animationDelay = `${Math.random() * 1.5}s`;
+    goldAnimation.appendChild(particle);
+  }
+
+  // Animasyonu başlat
+  goldAnimation.classList.add("active");
+
+  // Animasyon tamamlandığında parçacıkları temizle ve animasyonu durdur
   setTimeout(() => {
-    goldAnimation.style.display = "none";
+    goldAnimation.classList.remove("active");
+    goldAnimation.innerHTML = "";
   }, 1500); // 1.5 saniye
 }
 

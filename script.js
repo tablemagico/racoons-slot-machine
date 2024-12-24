@@ -19,6 +19,9 @@ const racoonImages = [
   "images/racoons15.jpeg"
 ];
 
+// Spin sayısını takip etmek için global değişken
+let spinCount = 0;
+
 // Basit dizi karıştırma (Fisher-Yates)
 function shuffleArray(array) {
   const arr = [...array];
@@ -44,7 +47,7 @@ function populateReel(reelElement, repeatCount) {
 }
 
 // Reel'i döndürme fonksiyonu (Hız yavaşlamalı)
-function spinReel(reelElement, duration, callback) {
+function spinReel(reelElement, duration, callback, forceJackpot=false, jackpotImage=null) {
   let startTime = null;
   const initialSpeed = 30; // Başlangıç hızı (px/frame)
   const deceleration = 0.5; // Hızın yavaşlama oranı
@@ -65,11 +68,29 @@ function spinReel(reelElement, duration, callback) {
 
       requestAnimationFrame(animate);
     } else {
-      // Spin tamamlandı, reel'i durdur
-      // Ortadaki resmin index'ini bul
-      const finalIndex = getMiddleImageIndex(reelElement);
-      reelElement.style.top = (-finalIndex * 100) + "px";
-      callback(finalIndex);
+      if (forceJackpot && jackpotImage) {
+        // Reel'i durdururken tüm resimleri aynı yapmak için
+        // Öncelikle reel içeriğini temizle
+        reelElement.innerHTML = "";
+        // Tek bir resmi tekrar ekle (repeatCount kadar)
+        for (let i = 0; i < 15; i++) { // 15 tekrar, reel yüksekliği 300px
+          const img = document.createElement("img");
+          img.src = jackpotImage;
+          reelElement.appendChild(img);
+        }
+        // Reel'i başa al
+        reelElement.style.top = "0px";
+        // Callback ile final index'i ayarla (rastgele bir index seç)
+        const finalIndex = Math.floor(Math.random() * racoonImages.length);
+        reelElement.style.top = (-finalIndex * 100) + "px";
+        callback(finalIndex);
+      } else {
+        // Normal duruş
+        // Ortadaki resmin index'ini bul
+        const finalIndex = getMiddleImageIndex(reelElement);
+        reelElement.style.top = (-finalIndex * 100) + "px";
+        callback(finalIndex);
+      }
     }
   }
 
@@ -110,36 +131,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
   spinBtn.addEventListener("click", () => {
     resultDiv.textContent = "";
+    spinCount++; // Spin sayısını artır
 
     // Her spin'de yeniden doldur (yeni shuffle)
     populateReel(reel1Content, repeatCount);
     populateReel(reel2Content, repeatCount);
     populateReel(reel3Content, repeatCount);
 
-    // Spin süresi (her reel için farklı olabilir)
-    const spinDuration = 2000; // 2 saniye
+    // Spin süresi
+    const spinDuration = 2000; // ms
 
     let finalIndexes = [null, null, null];
+
+    // Kontrol: Spin sayısı 3'ün katı mı?
+    const isJackpotSpin = (spinCount % 3 === 0);
+    let jackpotImage = null;
+    if (isJackpotSpin) {
+      // Rastgele bir jackpot resmi seç
+      jackpotImage = racoonImages[Math.floor(Math.random() * racoonImages.length)];
+    }
 
     // Reel 1'i döndür
     spinReel(reel1Content, spinDuration, (finalIndex1) => {
       finalIndexes[0] = finalIndex1;
       checkFinal();
-    });
+    }, isJackpotSpin, jackpotImage);
 
     // Reel 2'yi döndür
     // Reel 2'nin spin süresini biraz daha uzatıyoruz (gerçek slot makinesine benzerlik için)
     spinReel(reel2Content, spinDuration + 500, (finalIndex2) => {
       finalIndexes[1] = finalIndex2;
       checkFinal();
-    });
+    }, isJackpotSpin, jackpotImage);
 
     // Reel 3'ü döndür
     // Reel 3'ün spin süresini biraz daha uzatıyoruz
     spinReel(reel3Content, spinDuration + 1000, (finalIndex3) => {
       finalIndexes[2] = finalIndex3;
       checkFinal();
-    });
+    }, isJackpotSpin, jackpotImage);
 
     // Tüm reel'ler durduğunda sonucu kontrol et
     function checkFinal() {
@@ -150,6 +180,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (img1 === img2 && img2 === img3) {
           resultDiv.textContent = "Jackpot!";
+        } else if (img1 === img2 || img1 === img3 || img2 === img3) {
+          resultDiv.textContent = "Çok yaklaştın!";
         } else {
           resultDiv.textContent = "Tekrar dene!";
         }

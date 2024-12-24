@@ -22,6 +22,7 @@ body {
   animation: flicker 1.5s infinite;
 }
 
+/* Flicker Animasyonu */
 @keyframes flicker {
   0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
     text-shadow:
@@ -65,8 +66,8 @@ body {
 
 /* Reel (Each Slot) */
 .reel {
-  width: 30%; /* Reel'lerin esnek genişliği */
-  height: 200px; /* Görünür yükseklik */
+  width: 30%;       /* Reel'lerin esnek genişliği */
+  height: 300px;    /* Görünür yükseklik (3 satır x 100px) */
   overflow: hidden; /* Overflow gizle */
   margin: 0 5px;
   position: relative; /* Overlay için gerekli */
@@ -242,13 +243,16 @@ body {
 
 /* Responsive Design için parçacık boyutlarını ayarlama */
 @media (max-width: 768px) {
+  .machine {
+    max-width: 500px; /* Reel'lerin fazla büyük olmaması için maksimum genişlik */
+  }
+
   .reel {
-    width: 30%; /* Reel'ler esnek kalır */
-    height: 200px; /* Yükseklik azaltıldı */
+    height: 240px; /* 3 satır x 80px = 240px */
   }
 
   .reel-content img {
-    height: 80px; /* Satır yüksekliği azaltıldı */
+    height: 80px; /* Her satırın yüksekliği */
   }
 
   .spin-button {
@@ -286,13 +290,16 @@ body {
 }
 
 @media (max-width: 480px) {
+  .machine {
+    max-width: 300px; /* Reel'lerin fazla büyük olmaması için maksimum genişlik */
+  }
+
   .reel {
-    width: 35%; /* Reel'ler biraz daha geniş */
-    height: 180px; /* Yükseklik daha da azaltıldı */
+    height: 180px; /* 3 satır x 60px = 180px */
   }
 
   .reel-content img {
-    height: 60px; /* Satır yüksekliği daha da azaltıldı */
+    height: 60px; /* Her satırın yüksekliği */
   }
 
   .spin-button {
@@ -326,4 +333,17 @@ body {
     padding: 10px;
     max-width: 300px; /* Maksimum genişlik daha da azaltıldı */
   }
+}
+
+/* Enhanced Spin Button Animation (Optional) */
+.spin-button.animate-spin {
+  animation: spinButton 1s infinite;
+}
+
+@keyframes spinButton {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(5deg); }
+  50% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+  100% { transform: rotate(0deg); }
 }

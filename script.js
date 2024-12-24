@@ -184,6 +184,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Disable spin button during spin
     spinBtn.disabled = true;
 
+    // Add spinning animation class (optional)
+    // spinBtn.classList.add("animate-spin"); // Uncomment if enhanced animation is desired
+
     // Repopulate reels with new shuffled images
     populateReel(reel1Content, repeatCount);
     populateReel(reel2Content, repeatCount);
@@ -246,6 +249,9 @@ document.addEventListener("DOMContentLoaded", () => {
           // No jackpot
           resultDiv.textContent = "Try Again!";
         }
+
+        // Remove spinning animation class (optional)
+        // spinBtn.classList.remove("animate-spin"); // Uncomment if enhanced animation is desired
 
         // Re-enable spin button
         spinBtn.disabled = false;

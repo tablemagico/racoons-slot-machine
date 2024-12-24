@@ -1,17 +1,17 @@
-/* General Page Styles */
+/* Genel Sayfa Stilleri */
 body {
   margin: 0;
   padding: 0;
-  background: linear-gradient(to bottom, #1e3c72, #2a5298); /* Daha slot makinesi temalı arka plan */
+  background: linear-gradient(to bottom, #1e3c72, #2a5298);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   text-align: center;
-  color: #fff; /* Metin rengini beyaz yaparak kontrast oluştur */
+  color: #fff;
 }
 
 .slot-title {
   margin: 20px 0;
-  font-size: 48px;
-  color: #ffcc00; /* Altın rengi */
+  font-size: 8vw; /* Dinamik font boyutu */
+  color: #ffcc00;
   text-shadow: 2px 2px #333;
   animation: flicker 1.5s infinite;
 }
@@ -44,25 +44,157 @@ body {
 
 /* Machine Container: 3 Reels Side by Side */
 .machine {
-  display: flex; /* inline-flex'ten flex'e */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap; /* Küçük ekranlarda taşmayı önler */
   margin: 30px auto;
-  border: 6px solid #ffcc00; /* Altın rengi çerçeve */
+  border: 6px solid #ffcc00;
   border-radius: 15px;
   padding: 15px;
-  background: #333; /* Koyu arka plan slot makinesi hissi verir */
+  background: #333;
   box-shadow: 0 0 20px rgba(255, 204, 0, 0.5);
 }
 
 /* Reel (Each Slot) */
 .reel {
-  width: 120px;       /* Reel width */
-  height: 300px;      /* Visible window height (3 rows x 100px) */
-  overflow: hidden;   /* Hide overflowing content */
+  width: 120px;
+  height: 300px;
+  overflow: hidden;
   margin: 0 10px;
-  position: relative; /* For overlay purposes */
-  background: #000; /* Koyu arka plan */
+  position: relative;
+  background: #000;
   border-radius: 8px;
-  border: 3px solid #ffcc00; /* Altın rengi çerçeve */
+  border: 3px solid #ffcc00;
+}
+
+@media (max-width: 600px) {
+  .reel {
+    width: 80px;
+    height: 240px;
+  }
+
+  .reel-content img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .spin-button {
+    padding: 10px 20px;
+    font-size: 20px;
+  }
+
+  .result-message {
+    font-size: 20px;
+    min-height: 30px;
+  }
+
+  #result.jackpot {
+    font-size: 28px;
+  }
+
+  #creator {
+    font-size: 14px;
+  }
+
+  .gold-particle {
+    width: 15px;
+    height: 15px;
+  }
+
+  .slot-title {
+    font-size: 36px;
+  }
+
+  .machine {
+    margin: 20px auto;
+    padding: 10px;
+  }
+}
+
+/* Ekstra Medya Sorguları */
+@media (min-width: 601px) and (max-width: 900px) {
+  .reel {
+    width: 100px;
+    height: 250px;
+  }
+
+  .reel-content img {
+    width: 100px;
+    height: 83px;
+  }
+
+  .slot-title {
+    font-size: 6vw;
+  }
+
+  .spin-button {
+    font-size: 22px;
+    padding: 12px 24px;
+  }
+
+  .result-message {
+    font-size: 22px;
+    min-height: 35px;
+  }
+
+  #result.jackpot {
+    font-size: 30px;
+  }
+
+  #creator {
+    font-size: 16px;
+  }
+
+  .gold-particle {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 400px) {
+  .reel {
+    width: 70px;
+    height: 210px;
+  }
+
+  .reel-content img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .spin-button {
+    font-size: 18px;
+    padding: 8px 16px;
+  }
+
+  .result-message {
+    font-size: 18px;
+    min-height: 25px;
+  }
+
+  #result.jackpot {
+    font-size: 24px;
+  }
+
+  #creator {
+    font-size: 12px;
+  }
+
+  .gold-particle {
+    width: 12px;
+    height: 12px;
+  }
+
+  .slot-title {
+    font-size: 28px;
+  }
+
+  .machine {
+    margin: 15px auto;
+    padding: 8px;
+  }
 }
 
 /* Overlay for Reel: Top Gradient */
@@ -72,15 +204,15 @@ body {
   top: 0; 
   left: 0;
   width: 100%; 
-  height: 50px; /* Üst kısmı kaplar */
+  height: 50px;
   pointer-events: none;
   background: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0.7),
     rgba(0, 0, 0, 0)
   );
-  backdrop-filter: blur(5px); /* Bulanıklık oranı */
-  z-index: 3; /* İçeriklerin üzerinde */
+  backdrop-filter: blur(5px);
+  z-index: 3;
 }
 
 /* Overlay for Reel: Bottom Gradient */
@@ -90,22 +222,22 @@ body {
   bottom: 0; 
   left: 0;
   width: 100%; 
-  height: 50px; /* Alt kısmı kaplar */
+  height: 50px;
   pointer-events: none;
   background: linear-gradient(
     to top,
     rgba(0, 0, 0, 0.7),
     rgba(0, 0, 0, 0)
   );
-  backdrop-filter: blur(5px); /* Bulanıklık oranı */
-  z-index: 3; /* İçeriklerin üzerinde */
+  backdrop-filter: blur(5px);
+  z-index: 3;
 }
 
 /* Alternatif: Opacity ve Filter ile Üst ve Alt Resimleri Bulanıklaştırma */
-.reel-content img:nth-child(-n+2), /* İlk iki resim */
-.reel-content img:nth-last-child(-n+2) /* Son iki resim */ {
-  opacity: 0.5; /* Görünürlüğü azalt */
-  filter: blur(2px); /* Bulanıklık ekle */
+.reel-content img:nth-child(-n+2),
+.reel-content img:nth-last-child(-n+2) {
+  opacity: 0.5;
+  filter: blur(2px);
 }
 
 /* Reel Content: Vertical Column */
@@ -120,18 +252,18 @@ body {
 /* Each Image in Reel */
 .reel-content img {
   display: block;
-  width: 120px;   /* Full reel width */
-  height: 100px;  /* Each row 100px */
-  object-fit: cover; /* Maintain aspect ratio */
+  width: 100%; /* Dinamik genişlik */
+  height: auto;
+  object-fit: cover;
   border-bottom: 1px solid #555;
 }
 
 /* Spin Button Styling */
 .spin-button {
   padding: 15px 30px;
-  font-size: 24px; /* Daha büyük yazı */
-  background-color: #ffcc00; /* Altın rengi buton */
-  color: #000; /* Kontrast için siyah yazı */
+  font-size: 5vw; /* Dinamik font boyutu */
+  background-color: #ffcc00;
+  color: #000;
   border: none;
   cursor: pointer;
   border-radius: 10px;
@@ -139,11 +271,14 @@ body {
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
   transition: background-color 0.3s, transform 0.2s;
   font-weight: bold;
+  width: 80%;
+  max-width: 300px;
+  display: block;
 }
 
 /* Spin Button Hover Effects */
 .spin-button:hover:not(:disabled) {
-  background-color: #e6b800; /* Hover rengini biraz koyulaştır */
+  background-color: #e6b800;
   transform: scale(1.05);
 }
 
@@ -161,26 +296,26 @@ body {
 
 /* Result Text */
 .result-message {
-  font-size: 24px; /* Daha büyük yazı */
+  font-size: 5vw;
   font-weight: bold;
   margin-top: 10px;
-  min-height: 40px; /* Daha fazla alan */
-  color: #ffcc00; /* Altın rengi */
+  min-height: 40px;
+  color: #ffcc00;
   text-shadow: 1px 1px 2px #000;
 }
 
 /* Jackpot Mesajını Büyütme */
 #result.jackpot {
-  font-size: 36px; /* Jackpot mesajını daha büyük yap */
-  color: #ff0000; /* Jackpot için kırmızı renk */
+  font-size: 9vw;
+  color: #ff0000;
   text-shadow: 2px 2px 4px #000;
 }
 
 /* Creator Information Styling */
 #creator {
-  font-size: 16px;
+  font-size: 4vw;
   margin-top: 10px;
-  color: #ddd; /* Daha açık gri */
+  color: #ddd;
 }
 
 /* Gold Animation Styles */
@@ -210,7 +345,7 @@ body {
   background: radial-gradient(circle, gold 60%, yellow 100%);
   border-radius: 50%;
   opacity: 0.8;
-  animation: fall 3.5s linear forwards; /* Animasyon süresini artırdık */
+  animation: fall 3.5s linear forwards;
 }
 
 /* Animasyonun sürekliliğini sağlamak için her parçacığın animasyon süresi farklı olabilir */
@@ -220,20 +355,20 @@ body {
     opacity: 1;
   }
   100% {
-    transform: translateY(100vh) rotate(720deg); /* Daha fazla dönüş */
+    transform: translateY(100vh) rotate(720deg);
     opacity: 0;
   }
 }
 
 /* Activate Gold Animation */
 .gold-animation.active .gold-particle {
-  animation: fall 3.5s linear forwards; /* Animasyon süresini artırdık */
+  animation: fall 3.5s linear forwards;
 }
 
 /* Responsive Design için parçacık boyutlarını ayarlama */
 @media (max-width: 600px) {
   .gold-particle {
-    width: 10px; /* Mobilde daha küçük parçacıklar */
+    width: 10px;
     height: 10px;
   }
 }
@@ -255,7 +390,7 @@ body {
 @media (max-width: 600px) {
   .reel {
     width: 80px;
-    height: 240px; /* 3 rows x 80px */
+    height: 240px;
   }
 
   .reel-content img {
@@ -265,7 +400,7 @@ body {
 
   .spin-button {
     padding: 10px 20px;
-    font-size: 20px; /* Responsive yazı boyutu */
+    font-size: 20px;
   }
 
   .result-message {
@@ -287,7 +422,7 @@ body {
   }
 
   .slot-title {
-    font-size: 36px; /* Responsive başlık boyutu */
+    font-size: 36px;
   }
 
   .machine {

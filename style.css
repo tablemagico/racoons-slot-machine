@@ -92,6 +92,12 @@ h1 {
   transform: scale(1.05);
 }
 
+/* Spin Button Active (Pressed) */
+.spin-button:active {
+  transform: scale(0.95);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+
 /* Spin Button Disabled State */
 .spin-button:disabled {
   background-color: #999;

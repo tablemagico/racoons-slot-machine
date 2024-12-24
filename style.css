@@ -8,7 +8,6 @@ body {
   color: #fff; /* Metin rengini beyaz yaparak kontrast oluştur */
 }
 
-/* Başlık Stili: Daha Çekici ve Slot Makinesi Temalı */
 .slot-title {
   margin: 20px 0;
   font-size: 48px;
@@ -45,7 +44,7 @@ body {
 
 /* Machine Container: 3 Reels Side by Side */
 .machine {
-  display: flex; /* Değiştirildi: inline-flex'ten flex'e */
+  display: flex; /* inline-flex'ten flex'e */
   margin: 30px auto;
   border: 6px solid #ffcc00; /* Altın rengi çerçeve */
   border-radius: 15px;
@@ -66,23 +65,38 @@ body {
   border: 3px solid #ffcc00; /* Altın rengi çerçeve */
 }
 
-/* Overlay for Reel: Top and Bottom Gradient */
-.reel::after {
+/* Overlay for Reel: Top Gradient */
+.reel::before {
   content: "";
   position: absolute;
   top: 0; left: 0;
   width: 100%; 
-  height: 100%;
-  pointer-events: none; /* Allow clicks through */
-  /* Top and bottom 1/3 sections with gradient */
+  height: 50px; /* Üst kısmı kaplar */
+  pointer-events: none;
   background: linear-gradient(
     to bottom,
-    rgba(255, 255, 255, 0.3) 0%,
-    rgba(255, 255, 255, 0) 33%,
-    rgba(255, 255, 255, 0) 66%,
-    rgba(255, 255, 255, 0.3) 100%
+    rgba(0, 0, 0, 0.7),
+    rgba(0, 0, 0, 0)
   );
-  z-index: 2; /* Above reel content */
+  backdrop-filter: blur(3px);
+  z-index: 3; /* İçeriklerin üzerinde */
+}
+
+/* Overlay for Reel: Bottom Gradient */
+.reel::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; 
+  height: 50px; /* Alt kısmı kaplar */
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.7),
+    rgba(0, 0, 0, 0)
+  );
+  backdrop-filter: blur(3px);
+  z-index: 3; /* İçeriklerin üzerinde */
 }
 
 /* Reel Content: Vertical Column */

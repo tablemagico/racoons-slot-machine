@@ -1,5 +1,3 @@
-// script.js
-
 // 15 raccoon images
 const raccoonImages = [
   "images/racoons1.jpeg",
@@ -162,6 +160,9 @@ document.addEventListener("DOMContentLoaded", () => {
   populateReel(reel3Content, repeatCount);
 
   spinBtn.addEventListener("click", () => {
+    // Clear previous result classes
+    resultDiv.classList.remove("jackpot");
+
     resultDiv.textContent = "";
     spinCount++; // Increment spin count
 
@@ -219,12 +220,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (isJackpotSpin) {
           // Automatic jackpot on every 3rd spin
-          resultDiv.textContent = "Jackpot!";
+          resultDiv.textContent = "JACKPOT!";
+          resultDiv.classList.add("jackpot"); // Jackpot sınıfını ekle
           jackpotSound.play();
           showGoldAnimation();
         } else if (img1 === img2 && img2 === img3) {
           // All three images are the same
-          resultDiv.textContent = "Jackpot!";
+          resultDiv.textContent = "JACKPOT!";
+          resultDiv.classList.add("jackpot"); // Jackpot sınıfını ekle
           jackpotSound.play();
           showGoldAnimation();
         } else {

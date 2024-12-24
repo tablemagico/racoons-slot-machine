@@ -69,7 +69,8 @@ body {
 .reel::before {
   content: "";
   position: absolute;
-  top: 0; left: 0;
+  top: 0; 
+  left: 0;
   width: 100%; 
   height: 50px; /* Üst kısmı kaplar */
   pointer-events: none;
@@ -78,7 +79,7 @@ body {
     rgba(0, 0, 0, 0.7),
     rgba(0, 0, 0, 0)
   );
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(5px); /* Bulanıklık oranı */
   z-index: 3; /* İçeriklerin üzerinde */
 }
 
@@ -86,7 +87,8 @@ body {
 .reel::after {
   content: "";
   position: absolute;
-  bottom: 0; left: 0;
+  bottom: 0; 
+  left: 0;
   width: 100%; 
   height: 50px; /* Alt kısmı kaplar */
   pointer-events: none;
@@ -95,14 +97,22 @@ body {
     rgba(0, 0, 0, 0.7),
     rgba(0, 0, 0, 0)
   );
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(5px); /* Bulanıklık oranı */
   z-index: 3; /* İçeriklerin üzerinde */
+}
+
+/* Alternatif: Opacity ve Filter ile Üst ve Alt Resimleri Bulanıklaştırma */
+.reel-content img:nth-child(-n+2), /* İlk iki resim */
+.reel-content img:nth-last-child(-n+2) /* Son iki resim */ {
+  opacity: 0.5; /* Görünürlüğü azalt */
+  filter: blur(2px); /* Bulanıklık ekle */
 }
 
 /* Reel Content: Vertical Column */
 .reel-content {
   position: absolute;
-  top: 0; left: 0;
+  top: 0; 
+  left: 0;
   width: 100%;
   transition: top 0.1s linear;
 }
@@ -197,28 +207,35 @@ body {
 
 .gold-particle {
   position: absolute;
-  width: 20px;
-  height: 20px;
   background: radial-gradient(circle, gold 60%, yellow 100%);
   border-radius: 50%;
   opacity: 0.8;
-  animation: fall 1.5s linear forwards;
+  animation: fall 3.5s linear forwards; /* Animasyon süresini artırdık */
 }
 
+/* Animasyonun sürekliliğini sağlamak için her parçacığın animasyon süresi farklı olabilir */
 @keyframes fall {
   0% {
     transform: translateY(-100px) rotate(0deg);
     opacity: 1;
   }
   100% {
-    transform: translateY(100vh) rotate(360deg);
+    transform: translateY(100vh) rotate(720deg); /* Daha fazla dönüş */
     opacity: 0;
   }
 }
 
 /* Activate Gold Animation */
 .gold-animation.active .gold-particle {
-  animation: fall 1.5s linear forwards;
+  animation: fall 3.5s linear forwards; /* Animasyon süresini artırdık */
+}
+
+/* Responsive Design için parçacık boyutlarını ayarlama */
+@media (max-width: 600px) {
+  .gold-particle {
+    width: 10px; /* Mobilde daha küçük parçacıklar */
+    height: 10px;
+  }
 }
 
 /* Enhanced Spin Button Animation (Optional) */

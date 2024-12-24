@@ -121,13 +121,28 @@ function showGoldAnimation() {
   const goldAnimation = document.getElementById("goldAnimation");
   
   // Create gold particles
-  const particles = 30; // Number of particles
+  const particles = 100; // Artırılmış parçacık sayısı
   for (let i = 0; i < particles; i++) {
     const particle = document.createElement("div");
     particle.classList.add("gold-particle");
+    
     // Random positioning
     particle.style.left = `${Math.random() * 100}%`;
-    particle.style.animationDelay = `${Math.random() * 1.5}s`;
+    particle.style.top = `${Math.random() * 100}%`; // Parçacıkların ekranda rastgele yerlerde başlaması
+    particle.style.animationDelay = `${Math.random() * 2}s`;
+    
+    // Random size for more variation
+    const size = Math.random() * 15 + 10; // 10px ile 25px arasında
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+    
+    // Random animation duration
+    particle.style.animationDuration = `${Math.random() * 2 + 1.5}s`; // 1.5s ile 3.5s arasında
+    
+    // Random rotation speed
+    particle.style.animationTimingFunction = 'linear';
+    particle.style.transform = `rotate(${Math.random() * 360}deg)`;
+    
     goldAnimation.appendChild(particle);
   }
 
@@ -138,7 +153,7 @@ function showGoldAnimation() {
   setTimeout(() => {
     goldAnimation.classList.remove("active");
     goldAnimation.innerHTML = "";
-  }, 3000); 
+  }, 3500); // Animasyon süresini artırdık
 }
 
 document.addEventListener("DOMContentLoaded", () => {

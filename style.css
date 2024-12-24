@@ -86,7 +86,12 @@ h1 {
   margin-bottom: 20px;
 }
 
-#spinBtn:hover {
+#spinBtn:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+
+#spinBtn:hover:not(:disabled) {
   background-color: #5b54cc;
 }
 
@@ -96,4 +101,51 @@ h1 {
   font-weight: bold;
   margin-top: 10px;
   min-height: 30px;
+}
+
+/* Altın Animasyonu Stilleri */
+.gold-animation {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none; /* Başlangıçta gizli */
+  z-index: 10;
+}
+
+.gold-animation img {
+  width: 200px;
+  animation: fadeOut 1.5s forwards;
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Responsive Tasarım */
+@media (max-width: 600px) {
+  .reel {
+    width: 80px;
+    height: 240px; /* 3 satır x 80px */
+  }
+
+  .reel-content img {
+    width: 80px;
+    height: 80px;
+  }
+
+  #spinBtn {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  #result {
+    font-size: 18px;
+  }
+
+  .gold-animation img {
+    width: 150px;
+  }
 }

@@ -48,53 +48,57 @@ function populateReel(reelElement, repeatCount) {
 
 // Reel'i döndürme fonksiyonu (Hız yavaşlamalı)
 function spinReel(reelElement, duration, callback, forceJackpot=false, jackpotImage=null) {
-  let startTime = null;
-  const initialSpeed = 30; // Başlangıç hızı (px/frame)
-  const deceleration = 0.5; // Hızın yavaşlama oranı
-  let currentSpeed = initialSpeed;
+  try {
+    let startTime = null;
+    const initialSpeed = 30; // Başlangıç hızı (px/frame)
+    const deceleration = 0.5; // Hızın yavaşlama oranı
+    let currentSpeed = initialSpeed;
 
-  function animate(timestamp) {
-    if (!startTime) startTime = timestamp;
-    const elapsed = timestamp - startTime;
+    function animate(timestamp) {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
 
-    if (elapsed < duration) {
-      const displacement = currentSpeed;
-      let currentTop = parseFloat(reelElement.style.top) || 0;
-      reelElement.style.top = (currentTop - displacement) + "px";
+      if (elapsed < duration) {
+        const displacement = currentSpeed;
+        let currentTop = parseFloat(reelElement.style.top) || 0;
+        reelElement.style.top = (currentTop - displacement) + "px";
 
-      // Hızı yavaşlat
-      currentSpeed -= deceleration;
-      if (currentSpeed < 5) currentSpeed = 5; // Minimum hız
+        // Hızı yavaşlat
+        currentSpeed -= deceleration;
+        if (currentSpeed < 5) currentSpeed = 5; // Minimum hız
 
-      requestAnimationFrame(animate);
-    } else {
-      if (forceJackpot && jackpotImage) {
-        // Reel'i durdururken tüm resimleri aynı yapmak için
-        // Öncelikle reel içeriğini temizle
-        reelElement.innerHTML = "";
-        // Tek bir resmi tekrar ekle (repeatCount kadar)
-        for (let i = 0; i < 15; i++) { // 15 tekrar, reel yüksekliği 300px
-          const img = document.createElement("img");
-          img.src = jackpotImage;
-          reelElement.appendChild(img);
-        }
-        // Reel'i başa al
-        reelElement.style.top = "0px";
-        // Callback ile final index'i ayarla (rastgele bir index seç)
-        const finalIndex = Math.floor(Math.random() * racoonImages.length);
-        reelElement.style.top = (-finalIndex * 100) + "px";
-        callback(finalIndex);
+        requestAnimationFrame(animate);
       } else {
-        // Normal duruş
-        // Ortadaki resmin index'ini bul
-        const finalIndex = getMiddleImageIndex(reelElement);
-        reelElement.style.top = (-finalIndex * 100) + "px";
-        callback(finalIndex);
+        if (forceJackpot && jackpotImage) {
+          // Reel'i durdururken tüm resimleri aynı yapmak için
+          // Öncelikle reel içeriğini temizle
+          reelElement.innerHTML = "";
+          // Tek bir resmi tekrar ekle (repeatCount kadar)
+          for (let i = 0; i < 15; i++) { // 15 tekrar, reel yüksekliği 300px
+            const img = document.createElement("img");
+            img.src = jackpotImage;
+            reelElement.appendChild(img);
+          }
+          // Reel'i başa al
+          reelElement.style.top = "0px";
+          // Callback ile final index'i ayarla (rastgele bir index seç)
+          const finalIndex = Math.floor(Math.random() * racoonImages.length);
+          reelElement.style.top = (-finalIndex * 100) + "px";
+          callback(finalIndex);
+        } else {
+          // Normal duruş
+          // Ortadaki resmin index'ini bul
+          const finalIndex = getMiddleImageIndex(reelElement);
+          reelElement.style.top = (-finalIndex * 100) + "px";
+          callback(finalIndex);
+        }
       }
     }
-  }
 
-  requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
+  } catch (error) {
+    console.error("Spin animasyonunda hata:", error);
+  }
 }
 
 // Ortadaki resmi bulma fonksiyonu
@@ -132,6 +136,9 @@ document.addEventListener("DOMContentLoaded", () => {
   spinBtn.addEventListener("click", () => {
     resultDiv.textContent = "";
     spinCount++; // Spin sayısını artır
+
+    // Spin butonunu devre dışı bırak
+    spinBtn.disabled = true;
 
     // Her spin'de yeniden doldur (yeni shuffle)
     populateReel(reel1Content, repeatCount);
@@ -185,6 +192,9 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           resultDiv.textContent = "Tekrar dene!";
         }
+
+        // Spin butonunu tekrar etkinleştir
+        spinBtn.disabled = false;
 
         // Sonuçları sıfırla
         finalIndexes = [null, null, null];

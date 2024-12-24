@@ -167,6 +167,19 @@ h1 {
   animation: fall 1.5s linear forwards;
 }
 
+/* Enhanced Spin Button Animation (Optional) */
+.spin-button.animate-spin {
+  animation: spinButton 1s infinite;
+}
+
+@keyframes spinButton {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(5deg); }
+  50% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+  100% { transform: rotate(0deg); }
+}
+
 /* Responsive Design */
 @media (max-width: 600px) {
   .reel {
